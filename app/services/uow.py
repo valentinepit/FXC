@@ -1,13 +1,10 @@
 import abc
-import asyncio
 
 from sqlalchemy import URL, create_engine
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.config import settings
-from app.domain import InitialData, HistoricalTransactions
-
+from app.domain import HistoricalTransactions, InitialData
 from app.repository.base import BaseRepository
 from app.repository.historical_transactions import HistoricalTransactionsRepository
 from app.repository.initial_data import InitialDataRepository
@@ -79,8 +76,9 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
     def __enter__(self):
         self.session = self.session_factory()
         self._initial_data = InitialDataRepository(session=self.session, model_cls=InitialData)
-        self._historical_transactions = HistoricalTransactionsRepository(session=self.session,
-                                                                         model_cls=HistoricalTransactions)
+        self._historical_transactions = HistoricalTransactionsRepository(
+            session=self.session, model_cls=HistoricalTransactions
+        )
         return super().__enter__()
 
     @property

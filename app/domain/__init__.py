@@ -1,3 +1,3 @@
-from .models import InitialData, HistoricalTransactions
+from .models import HistoricalTransactions, InitialData
 
 _all_models = [HistoricalTransactions, InitialData]

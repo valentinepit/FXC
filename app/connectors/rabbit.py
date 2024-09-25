@@ -17,8 +17,8 @@ class RabbitConnector:
         # TODO need to try and reconnect in case of error
         self.credentials = pika.PlainCredentials(self.user, self.password)
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host=self.host, port=self.port,
-                                      credentials=self.credentials))
+            pika.ConnectionParameters(host=self.host, port=self.port, credentials=self.credentials)
+        )
         self.rmq_channel = self.connection.channel()
 
     def disconnect(self):
@@ -30,7 +30,7 @@ class RabbitConnector:
             self.rmq_channel.start_consuming()
         except KeyboardInterrupt:
             self.rmq_channel.stop_consuming()
-        except Exception:
+        except Exception:  # noqa PIE786
             self.rmq_channel.stop_consuming()
 
     def producer(self, *args):

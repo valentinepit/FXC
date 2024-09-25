@@ -1,11 +1,11 @@
 from app.config import settings
 from app.connectors.redis import RedisConnector
-from app.services.uow import SqlAlchemyUnitOfWork
 from app.services import historical_transactions as historical_transactions_service
+from app.services.uow import SqlAlchemyUnitOfWork
 
 
 def on_message(channel, method_frame, header_frame, body):
-    body_str = body.decode("utf-8")[:4000]
+    body_str = body.decode('utf-8')[:4000]
     uow = SqlAlchemyUnitOfWork()
     print(body_str)
     transaction = historical_transactions_service.create_transaction(uow, body_str)

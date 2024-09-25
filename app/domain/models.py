@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, relationship, mapped_column, DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -8,16 +8,17 @@ class Base(DeclarativeBase):
 
 
 class InitialData(Base):
-    __tablename__ = "initial_data"
+    __tablename__ = 'initial_data'
 
     provider_name: Mapped[str]
     initial_value: Mapped[int]
-    historical_transactions: Mapped[list['HistoricalTransactions'] | None] = relationship(back_populates='initial_data',
-                                                                                          cascade='all, delete-orphan')
+    historical_transactions: Mapped[list['HistoricalTransactions'] | None] = relationship(
+        back_populates='initial_data', cascade='all, delete-orphan'
+    )
 
 
 class HistoricalTransactions(Base):
-    __tablename__ = "historical_transactions"
+    __tablename__ = 'historical_transactions'
 
     transaction_value: Mapped[int]
 

@@ -48,10 +48,10 @@ class BaseSQLAlchemyRepository(BaseRepository):
         raise NotFoundException(f'{self.model_cls.__name__} with id {instance_id} not found')
 
     async def get_or_error_by_field(
-            self,
-            field: str,
-            value: Any,
-            joined_load: tuple[str, ...] | None = None,
+        self,
+        field: str,
+        value: Any,
+        joined_load: tuple[str, ...] | None = None,
     ) -> Any:
         if instance := await self.get(field, value, joined_load=joined_load):
             return instance

@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     db_password: str = 'password'
 
     # ------ rabbitmq settings ---------
-    queue_name : str = 'incoming_transactions'
+    queue_name: str = 'incoming_transactions'
     rabbitmq_host: str = 'localhost'
     rabbitmq_port: int = 5672
     rabbitmq_user: str = 'user'

@@ -1,9 +1,4 @@
-from app.config import settings
-from app.connectors.base import BaseConnector
 import redis
-
-from app.services.uow import SqlAlchemyUnitOfWork
-from app.services import historical_transactions as historical_transactions_service
 
 
 class RedisConnector:
