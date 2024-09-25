@@ -1,17 +1,17 @@
 import pika
 
 from app.config import settings
+from app.connectors.base import BaseConnector
 from app.connectors.utils.utils import on_message
 
 
-class RabbitConnector:
+class RabbitConnector(BaseConnector):
     def __init__(self, host, port, user, password):
         self.password = password
         self.user = user
         self.port = port
         self.host = host
         self.connection, self.credentials, self.rmq_channel, self.rmq_connection = None, None, None, None
-        # super().__init__()
 
     def connect(self):
         # TODO need to try and reconnect in case of error

@@ -1,14 +1,15 @@
 import redis
 
+from app.connectors.base import BaseConnector
 
-class RedisConnector:
+
+class RedisConnector(BaseConnector):
     def __init__(self, host, port, user=None, password=None):
         self.password = password
         self.user = user
         self.port = port
         self.host = host
         self.redis_connection = None
-        # super().__init__()
 
     def connect(self):
         # TODO need to try and reconnect in case of error
