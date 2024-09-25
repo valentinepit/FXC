@@ -1,0 +1,10 @@
+[flake8]
+max-line-length = 120
+ignore = PIE803, G004, SIM105, B008, TYP001, A005
+max-cognitive-complexity = 12
+exclude =
+    .git,
+    alembic,
+    venv,
+    __pycache__,
+    helm

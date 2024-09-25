@@ -1,0 +1,17 @@
+# ------ postgres settings ---------
+DB_NAME
+DB_USER
+DB_PASSWORD
+DB_HOST
+DB_PORT
+# ------ rabbitmq settings ---------
+QUEUE_NAME
+RABBITMQ_HOST
+RABBITMQ_PORT
+RABBITMQ_USER
+RABBITMQ_PASSWORD
+
+# ------ redis settings ---------
+REDIS_HOST
+REDIS_PORT
+REDIS_DB
