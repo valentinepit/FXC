@@ -1,6 +1,7 @@
 from config import settings
 from connectors.rabbit import RabbitConnector
 
+
 if __name__ == '__main__':
     rmq_conn = RabbitConnector(
         host=settings.rabbitmq_host,
