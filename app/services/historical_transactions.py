@@ -8,8 +8,8 @@ from app.services.uow import SqlAlchemyUnitOfWork
 def create_transaction(uow: SqlAlchemyUnitOfWork, data: str) -> HistoricalTransactions | None:
     transaction_data = json.loads(data)
     with uow:
-        method = uow.initial_data.get('id', transaction_data['id'])
-        if not method:
+        provider_name = uow.initial_data.get('id', transaction_data['id'])
+        if not provider_name:
             return None
         transaction = HistoricalTransactions(
             provider_id=transaction_data['id'], transaction_value=transaction_data['value']

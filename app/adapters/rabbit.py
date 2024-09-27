@@ -1,5 +1,6 @@
 import pika
 
+from app.adapters.redis import RedisAdapter
 from app.adapters.utils.utils import update_redis_value
 from app.config import logger, settings
 from app.services import historical_transactions as historical_transactions_service
@@ -41,8 +42,9 @@ class RabbitAdapter:
         transaction = historical_transactions_service.create_transaction(uow, body_str)
         if not transaction:
             logger.info('Wrong method')
-        # key, value = tuple(transaction.items())[0]
+        redis_adapter = RedisAdapter(host=settings.redis_host, port=settings.redis_port)
         update_redis_value(
             f'{transaction.initial_data.id}_{transaction.initial_data.provider_name}',
             int(transaction.transaction_value),
+            adapter=redis_adapter,
         )
