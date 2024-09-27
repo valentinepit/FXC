@@ -23,4 +23,4 @@ class HistoricalTransactions(Base):
     transaction_value: Mapped[int]
 
     provider_id: Mapped[int] = mapped_column(ForeignKey('initial_data.id'))
-    initial_data: Mapped['InitialData'] = relationship(back_populates='historical_transactions')
+    initial_data: Mapped['InitialData'] = relationship(back_populates='historical_transactions', lazy='joined')

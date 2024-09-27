@@ -1,11 +1,12 @@
 import pika
 
-from app.config import settings
-from app.connectors.base import BaseConnector
-from app.connectors.utils.utils import on_message
+from app.adapters.utils.utils import update_redis_value
+from app.config import logger, settings
+from app.services import historical_transactions as historical_transactions_service
+from app.services.uow import SqlAlchemyUnitOfWork
 
 
-class RabbitConnector(BaseConnector):
+class RabbitAdapter:
     def __init__(self, host, port, user, password):
         self.password = password
         self.user = user
@@ -14,7 +15,6 @@ class RabbitConnector(BaseConnector):
         self.connection, self.credentials, self.rmq_channel, self.rmq_connection = None, None, None, None
 
     def connect(self):
-        # TODO need to try and reconnect in case of error
         self.credentials = pika.PlainCredentials(self.user, self.password)
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(host=self.host, port=self.port, credentials=self.credentials)
@@ -25,7 +25,7 @@ class RabbitConnector(BaseConnector):
         self.rmq_connection.close()
 
     def consumer(self):
-        self.rmq_channel.basic_consume(settings.queue_name, on_message)
+        self.rmq_channel.basic_consume(settings.queue_name, self.on_message)
         try:
             self.rmq_channel.start_consuming()
         except KeyboardInterrupt:
@@ -33,5 +33,16 @@ class RabbitConnector(BaseConnector):
         except Exception:  # noqa PIE786
             self.rmq_channel.stop_consuming()
 
-    def producer(self, *args):
-        pass
+    @staticmethod
+    def on_message(channel, method_frame, header_frame, body):
+        body_str = body.decode('utf-8')[:4000]
+        uow = SqlAlchemyUnitOfWork()
+        logger.info(body_str)
+        transaction = historical_transactions_service.create_transaction(uow, body_str)
+        if not transaction:
+            logger.info('Wrong method')
+        # key, value = tuple(transaction.items())[0]
+        update_redis_value(
+            f'{transaction.initial_data.id}_{transaction.initial_data.provider_name}',
+            int(transaction.transaction_value),
+        )
