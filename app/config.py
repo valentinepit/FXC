@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # ------ postgres settings ---------
     db_name: str = 'fxc'
     db_host: str = 'localhost'
-    db_port: int = 5433
+    db_port: int = 5432
     db_user: str = 'user'
     db_password: str = 'password'
 
